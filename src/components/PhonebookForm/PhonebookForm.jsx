@@ -1,5 +1,4 @@
 import { Formik } from 'formik';
-import { nanoid } from 'nanoid';
 import * as Yup from 'yup';
 import {
   Alert,
@@ -34,7 +33,7 @@ export const PhonebookForm = ({ onAdd }) => {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
-          onAdd({ ...values, id: nanoid() });
+          onAdd({ ...values });
           actions.resetForm();
         }}
       >

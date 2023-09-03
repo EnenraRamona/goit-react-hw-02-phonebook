@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 import { PhonebookForm } from './PhonebookForm/PhonebookForm';
 import { PhonebookList } from './PhonebookList/PhonebookList';
 import { ContactsFilter } from './PhonebookFilter/Phonebookfilter';
@@ -20,11 +21,14 @@ export class App extends Component {
       contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
     );
 
-    !existingContact
-      ? this.setState(PrevState => ({
-          contacts: [...PrevState.contacts, newContact],
-        }))
-      : alert(`Contact "${newContact.name}" already exists in the phonebook.`);
+    if (existingContact) {
+      alert(`Contact "${newContact.name}" already exists in the phonebook.`);
+      return;
+    }
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
+    }));
+    alert(`Contact "${newContact.name}"added`);
   };
 
   handleFilterChange = filter => {
@@ -32,9 +36,9 @@ export class App extends Component {
   };
 
   handleDeleteContact = contactId => {
-    this.setState(PrevState => {
+    this.setState(prevState => {
       return {
-        contacts: PrevState.contacts.filter(({ id }) => id !== contactId),
+        contacts: prevState.contacts.filter(({ id }) => id !== contactId),
       };
     });
   };
@@ -58,7 +62,7 @@ export class App extends Component {
           name={name}
           number={number}
           deleteContact={this.handleDeleteContact}
-        ></PhonebookList>
+        />
       </>
     );
   }
